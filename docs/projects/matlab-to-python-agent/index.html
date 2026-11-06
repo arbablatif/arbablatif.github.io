@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MATLAB to Python Agent with Verified Output | Arbab Latif</title>
+<meta name="description" content="An LLM agent that converts MATLAB scripts to NumPy and SciPy, compares every output with real MATLAB results, and retries using the exact test failures.">
+<meta name="author" content="Arbab Latif">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://arbablatif.github.io/projects/matlab-to-python-agent/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Arbab Latif">
+<meta property="og:title" content="MATLAB to Python Agent with Verified Output | Arbab Latif">
+<meta property="og:description" content="An LLM agent that converts MATLAB scripts to NumPy and SciPy, compares every output with real MATLAB results, and retries using the exact test failures.">
+<meta property="og:url" content="https://arbablatif.github.io/projects/matlab-to-python-agent/">
+<meta property="og:image" content="https://arbablatif.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MATLAB to Python Agent with Verified Output | Arbab Latif">
+<meta name="twitter:description" content="An LLM agent that converts MATLAB scripts to NumPy and SciPy, compares every output with real MATLAB results, and retries using the exact test failures.">
+<meta name="twitter:image" content="https://arbablatif.github.io/assets/og.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareSourceCode", "name": "MATLAB to Python Agent", "description": "An LLM agent that converts MATLAB scripts to NumPy and SciPy, compares every output with real MATLAB results, and retries using the exact test failures.", "url": "https://arbablatif.github.io/projects/matlab-to-python-agent/", "codeRepository": "https://github.com/arbablatif/matlab-to-python-agent", "programmingLanguage": "Python", "author": {"@type": "Person", "name": "Arbab Latif", "url": "https://arbablatif.github.io/"}, "license": "https://opensource.org/licenses/MIT"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arbablatif.github.io/"}, {"@type": "ListItem", "position": 2, "name": "MATLAB to Python Agent", "item": "https://arbablatif.github.io/projects/matlab-to-python-agent/"}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head"><div class="wrap">
+<a class="brand" href="/">Arbab Latif</a>
+<nav aria-label="Main"><a href="/#work">Work</a><a href="/#about">About</a><a href="/#contact">Contact</a><a href="https://github.com/arbablatif">GitHub</a></nav>
+</div></header>
+<main id="main" class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/#work">Work</a></li><li>MATLAB to Python Agent</li></ol></nav>
+<article class="project">
+<h1>MATLAB to Python Agent with Verified Output</h1>
+<p class="lede">An LLM agent that converts MATLAB .m scripts to Python with NumPy, SciPy and Matplotlib. It checks its own work against values saved from a real MATLAB run, and retries using the exact failures when the numbers do not match.</p>
+<p class="actions"><a class="btn primary" href="https://github.com/arbablatif/matlab-to-python-agent">View the code on GitHub</a><a class="btn" href="https://github.com/arbablatif/matlab-to-python-agent#results">Full results</a></p>
+<dl class="metrics"><div><dt>samples passed on the first attempt</dt><dd>4/5</dd></div><div><dt>samples passed after retries</dt><dd>5/5</dd></div><div><dt>MATLAB version that produced the reference outputs</dt><dd>R2025b</dd></div></dl>
+
+<section class="prose"><h2>Problem</h2><p>Teams moving off MATLAB often have hundreds of analysis scripts. Translating them with an LLM fails quietly: the Python runs but the answers are slightly wrong, because of 1-based indexing, column-major reshape, or different function defaults such as filtfilt edge padding. Code that looks right is not good enough; it needs numerical proof.</p></section>
+<section class="prose"><h2>Approach</h2><ul><li>Reference outputs come from a real MATLAB run and are committed, so MATLAB is not needed afterwards.</li><li>The agent scans the script for known built-ins and adds only the relevant rows of a 50-function mapping table to the prompt.</li><li>A generated pytest file compares each variable with np.allclose, with per-variable tolerances.</li><li>On failure, the next prompt carries the previous code and the exact failing checks.</li></ul></section>
+<section class="prose"><h2>Results</h2><ul><li>Five bundled samples were checked against MATLAB R2025b at tight default tolerances, using 6 API calls in total.</li><li>One sample failed first because the model left MATLAB indexing in the code. The agent fed the error back, and the second attempt passed every check.</li><li>Mock mode plants realistic bugs, such as row-major reshape, so the retry path is tested without API calls.</li></ul></section>
+<section class="prose"><h2>Limitations</h2><ul><li>Numerical checks need one MATLAB run to produce reference values.</li><li>It handles one script at a time; multi-file projects, classes and Simulink are out of scope.</li><li>Five samples show the loop works, not that it would reach 100% on real-world code.</li><li>Converted scripts run locally with no sandbox, so only convert code you trust.</li></ul></section>
+<section class="prose"><h2>Built with</h2><ul class="stack"><li>Python</li><li>NumPy</li><li>SciPy</li><li>Matplotlib</li><li>pytest</li><li>MATLAB</li><li>Streamlit</li><li>Gemini</li><li>Anthropic</li><li>OpenAI</li></ul></section>
+</article>
+<section class="group"><h2>Related projects</h2><ul class="work"><li><a href="/projects/dsp-copilot/"><div><h3>DSP Copilot</h3><p>Runs signal processing from plain-English requests, with the maths done by typed tools, not the model.</p></div><div class="m"><strong>6 of 6</strong><span>live requests passed, measured on the output signals</span></div></a></li><li><a href="/projects/analytics-agent/"><div><h3>Analytics Agent</h3><p>Answers business questions in plain English with guarded SQL, and every figure traces to a query.</p></div><div class="m"><strong>93%</strong><span>execution accuracy with business definitions, up from 67%</span></div></a></li></ul></section>
+</main>
+<footer class="site-foot"><div class="wrap">Arbab Latif. Project code is MIT licensed on <a href="https://github.com/arbablatif">GitHub</a>.</div></footer>
+</body>
+</html>

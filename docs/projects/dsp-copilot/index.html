@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DSP Copilot: LLM Agent for Signal Processing | Arbab Latif</title>
+<meta name="description" content="An LLM agent for digital signal processing on CSV and WAV files. It calls typed FFT, filter and peak detection tools, and shows every step.">
+<meta name="author" content="Arbab Latif">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://arbablatif.github.io/projects/dsp-copilot/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Arbab Latif">
+<meta property="og:title" content="DSP Copilot: LLM Agent for Signal Processing | Arbab Latif">
+<meta property="og:description" content="An LLM agent for digital signal processing on CSV and WAV files. It calls typed FFT, filter and peak detection tools, and shows every step.">
+<meta property="og:url" content="https://arbablatif.github.io/projects/dsp-copilot/">
+<meta property="og:image" content="https://arbablatif.github.io/assets/projects/dsp-copilot.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DSP Copilot: LLM Agent for Signal Processing | Arbab Latif">
+<meta name="twitter:description" content="An LLM agent for digital signal processing on CSV and WAV files. It calls typed FFT, filter and peak detection tools, and shows every step.">
+<meta name="twitter:image" content="https://arbablatif.github.io/assets/projects/dsp-copilot.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareSourceCode", "name": "DSP Copilot", "description": "An LLM agent for digital signal processing on CSV and WAV files. It calls typed FFT, filter and peak detection tools, and shows every step.", "url": "https://arbablatif.github.io/projects/dsp-copilot/", "codeRepository": "https://github.com/arbablatif/dsp-copilot", "programmingLanguage": "Python", "author": {"@type": "Person", "name": "Arbab Latif", "url": "https://arbablatif.github.io/"}, "license": "https://opensource.org/licenses/MIT"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arbablatif.github.io/"}, {"@type": "ListItem", "position": 2, "name": "DSP Copilot", "item": "https://arbablatif.github.io/projects/dsp-copilot/"}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head"><div class="wrap">
+<a class="brand" href="/">Arbab Latif</a>
+<nav aria-label="Main"><a href="/#work">Work</a><a href="/#about">About</a><a href="/#contact">Contact</a><a href="https://github.com/arbablatif">GitHub</a></nav>
+</div></header>
+<main id="main" class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/#work">Work</a></li><li>DSP Copilot</li></ol></nav>
+<article class="project">
+<h1>DSP Copilot: LLM Agent for Signal Processing</h1>
+<p class="lede">An LLM agent that does signal processing on your CSV or WAV files. Ask in plain English, for example to remove 50 Hz hum and show the spectrum. It chooses the tools, runs them, plots the results and explains what it did.</p>
+<p class="actions"><a class="btn primary" href="https://github.com/arbablatif/dsp-copilot">View the code on GitHub</a><a class="btn" href="https://github.com/arbablatif/dsp-copilot#results">Full results</a></p>
+<dl class="metrics"><div><dt>live requests passed, measured on the output signals</dt><dd>6 of 6</dd></div><div><dt>heart rate from a synthetic ECG with a true rate of 72</dt><dd>72.0 bpm</dd></div><div><dt>automated tests</dt><dd>46</dd></div></dl>
+<figure><img src="/assets/projects/dsp-copilot.png" alt="Amplitude spectrum of an ECG before and after removing 50 Hz hum" width="1020" height="432" loading="lazy"><figcaption>Spectrum before and after the agent removed 50 Hz hum from a synthetic ECG.</figcaption></figure>
+<section class="prose"><h2>Problem</h2><p>Routine signal analysis needs specialist knowledge: which filter to use, how to set it, and how to tell whether it worked. A general chatbot can talk about this, but it cannot touch your data and may invent numbers.</p></section>
+<section class="prose"><h2>Approach</h2><ul><li>The language model plans and explains, and it does no maths.</li><li>The model can call 8 fixed tools and never writes or runs code. Numbers come from NumPy and SciPy.</li><li>Arguments are checked first, so a cutoff above Nyquist goes back to the model as an error it can correct.</li><li>Signals stay local: the model sees summaries and results, never the samples.</li><li>The interface lists every call with its arguments, result and plots.</li></ul></section>
+<section class="prose"><h2>Results</h2><ul><li>Checks measure the signals the agent actually produced, not what it says it did.</li><li>The first live run also scored 6 of 6, yet two answers were wrong. Reading the answers by hand exposed four problems, all traced to how the tools reported results or handled input.</li><li>The lesson: passing checks on the output does not validate the explanation.</li></ul></section>
+<section class="prose"><h2>Limitations</h2><ul><li>Six requests, one run each, all on clean synthetic signals.</li><li>Explanations are not fully machine-checked, so trust the tool trace over the prose.</li><li>Only Gemini has been tested live.</li><li>This is not a medical device. The ECG is synthetic and the heart-rate tool is a demonstration.</li></ul></section>
+<section class="prose"><h2>Built with</h2><ul class="stack"><li>Python</li><li>NumPy</li><li>SciPy</li><li>Streamlit</li><li>Tool calling</li><li>Gemini</li><li>Anthropic</li><li>OpenAI</li></ul></section>
+</article>
+<section class="group"><h2>Related projects</h2><ul class="work"><li><a href="/projects/predictive-maintenance-agent/"><div><h3>Predictive Maintenance Agent</h3><p>Turns machine signals into maintenance tickets, and code checks every number the LLM writes.</p></div><div class="m"><strong>97.5%</strong><span>recording accuracy on unseen operating loads (CWRU)</span></div></a></li><li><a href="/projects/contactless-vitals/"><div><h3>Contactless Vitals</h3><p>Extracts a pulse waveform from ordinary face video using remote photoplethysmography (rPPG).</p></div><div class="m"><strong>0.79</strong><span>correlation with a contact sensor on one real recording</span></div></a></li></ul></section>
+</main>
+<footer class="site-foot"><div class="wrap">Arbab Latif. Project code is MIT licensed on <a href="https://github.com/arbablatif">GitHub</a>.</div></footer>
+</body>
+</html>

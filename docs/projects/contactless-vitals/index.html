@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contactless Vitals: Pulse Extraction with rPPG | Arbab Latif</title>
+<meta name="description" content="A Python package that extracts a pulse waveform from face video with remote photoplethysmography (rPPG), using MediaPipe, GREEN, CHROM and POS.">
+<meta name="author" content="Arbab Latif">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://arbablatif.github.io/projects/contactless-vitals/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Arbab Latif">
+<meta property="og:title" content="Contactless Vitals: Pulse Extraction with rPPG | Arbab Latif">
+<meta property="og:description" content="A Python package that extracts a pulse waveform from face video with remote photoplethysmography (rPPG), using MediaPipe, GREEN, CHROM and POS.">
+<meta property="og:url" content="https://arbablatif.github.io/projects/contactless-vitals/">
+<meta property="og:image" content="https://arbablatif.github.io/assets/projects/contactless-vitals.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contactless Vitals: Pulse Extraction with rPPG | Arbab Latif">
+<meta name="twitter:description" content="A Python package that extracts a pulse waveform from face video with remote photoplethysmography (rPPG), using MediaPipe, GREEN, CHROM and POS.">
+<meta name="twitter:image" content="https://arbablatif.github.io/assets/projects/contactless-vitals.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareSourceCode", "name": "Contactless Vitals", "description": "A Python package that extracts a pulse waveform from face video with remote photoplethysmography (rPPG), using MediaPipe, GREEN, CHROM and POS.", "url": "https://arbablatif.github.io/projects/contactless-vitals/", "codeRepository": "https://github.com/arbablatif/contactless-vitals", "programmingLanguage": "Python", "author": {"@type": "Person", "name": "Arbab Latif", "url": "https://arbablatif.github.io/"}, "license": "https://opensource.org/licenses/MIT"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arbablatif.github.io/"}, {"@type": "ListItem", "position": 2, "name": "Contactless Vitals", "item": "https://arbablatif.github.io/projects/contactless-vitals/"}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head"><div class="wrap">
+<a class="brand" href="/">Arbab Latif</a>
+<nav aria-label="Main"><a href="/#work">Work</a><a href="/#about">About</a><a href="/#contact">Contact</a><a href="https://github.com/arbablatif">GitHub</a></nav>
+</div></header>
+<main id="main" class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/#work">Work</a></li><li>Contactless Vitals</li></ol></nav>
+<article class="project">
+<h1>Contactless Vitals: Pulse Extraction with rPPG</h1>
+<p class="lede">A Python package that extracts a pulse waveform from ordinary face video using remote photoplethysmography (rPPG). It tracks the face, measures the colour of three skin regions, and separates the pulse from motion and lighting changes. It stops at the waveform and does not estimate heart rate yet.</p>
+<p class="actions"><a class="btn primary" href="https://github.com/arbablatif/contactless-vitals">View the code on GitHub</a><a class="btn" href="https://github.com/arbablatif/contactless-vitals#results">Full results</a></p>
+<dl class="metrics"><div><dt>correlation with a contact sensor on one real recording</dt><dd>0.79</dd></div><div><dt>dB SNR for POS under in-band flicker, where GREEN gives -15.9</dt><dd>18.5</dd></div><div><dt>automated tests</dt><dd>139</dd></div></dl>
+<figure><img src="/assets/projects/contactless-vitals.png" alt="Waveforms under in-band brightness flicker: GREEN follows the flicker while CHROM and POS follow the true pulse" width="1344" height="800" loading="lazy"><figcaption>With brightness flicker inside the pulse band, GREEN follows the flicker while CHROM and POS follow the pulse.</figcaption></figure>
+<section class="prose"><h2>Problem</h2><p>Each heartbeat changes skin colour by well under 1% of its brightness. A camera can see this, which makes it possible to monitor a pulse without touching anyone. The difficulty is that head movement, flickering lights and shine change the picture far more, and some of them repeat at heart-rate speeds, so a frequency filter alone cannot remove them.</p></section>
+<section class="prose"><h2>Approach</h2><ul><li>MediaPipe FaceLandmarker follows 478 landmarks through the video.</li><li>Landmarks define the forehead and both cheeks, and a skin mask uses each region&#x27;s own median colour, so no skin tone is assumed.</li><li>Each region becomes one mean RGB value per frame, resampled to even time steps. Long gaps stay empty, so nothing is invented.</li><li>GREEN, CHROM and POS each turn the RGB trace into a pulse signal, followed by detrending and a zero-phase 0.7 to 4 Hz band-pass.</li></ul></section>
+<section class="prose"><h2>Results</h2><ul><li>Distortion inside the pulse band is the real test. GREEN falls by about 42 dB, while CHROM and POS stay near their clean scores.</li><li>With no pulse in the video, every method stays below 0 dB, so there is no false pulse.</li><li>Quality falls on darker skin in the simulation. This is a real weakness and is reported as one.</li><li>One real UBFC-rPPG recording exposed timestamp problems that synthetic video could not.</li></ul></section>
+<section class="prose"><h2>Limitations</h2><ul><li>One real person so far, which is a first check and not a measure of accuracy.</li><li>Synthetic videos prove the code is correct, not that it works well on people.</li><li>Processing is offline. Low light, heavy compression and large head turns are untested.</li><li>This is a research project, not a medical device, and must not be used for diagnosis or monitoring.</li></ul></section>
+<section class="prose"><h2>Built with</h2><ul class="stack"><li>Python</li><li>MediaPipe</li><li>NumPy</li><li>SciPy</li><li>Matplotlib</li><li>scikit-image</li><li>pytest</li></ul></section>
+</article>
+<section class="group"><h2>Related projects</h2><ul class="work"><li><a href="/projects/dsp-copilot/"><div><h3>DSP Copilot</h3><p>Runs signal processing from plain-English requests, with the maths done by typed tools, not the model.</p></div><div class="m"><strong>6 of 6</strong><span>live requests passed, measured on the output signals</span></div></a></li><li><a href="/projects/predictive-maintenance-agent/"><div><h3>Predictive Maintenance Agent</h3><p>Turns machine signals into maintenance tickets, and code checks every number the LLM writes.</p></div><div class="m"><strong>97.5%</strong><span>recording accuracy on unseen operating loads (CWRU)</span></div></a></li></ul></section>
+</main>
+<footer class="site-foot"><div class="wrap">Arbab Latif. Project code is MIT licensed on <a href="https://github.com/arbablatif">GitHub</a>.</div></footer>
+</body>
+</html>

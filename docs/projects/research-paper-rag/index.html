@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Paper RAG with Page-Level Citations | Arbab Latif</title>
+<meta name="description" content="A RAG assistant for engineering research PDFs that cites the document and page for every claim and refuses when the sources lack the answer.">
+<meta name="author" content="Arbab Latif">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://arbablatif.github.io/projects/research-paper-rag/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Arbab Latif">
+<meta property="og:title" content="Research Paper RAG with Page-Level Citations | Arbab Latif">
+<meta property="og:description" content="A RAG assistant for engineering research PDFs that cites the document and page for every claim and refuses when the sources lack the answer.">
+<meta property="og:url" content="https://arbablatif.github.io/projects/research-paper-rag/">
+<meta property="og:image" content="https://arbablatif.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Research Paper RAG with Page-Level Citations | Arbab Latif">
+<meta name="twitter:description" content="A RAG assistant for engineering research PDFs that cites the document and page for every claim and refuses when the sources lack the answer.">
+<meta name="twitter:image" content="https://arbablatif.github.io/assets/og.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareSourceCode", "name": "Research Paper RAG", "description": "A RAG assistant for engineering research PDFs that cites the document and page for every claim and refuses when the sources lack the answer.", "url": "https://arbablatif.github.io/projects/research-paper-rag/", "codeRepository": "https://github.com/arbablatif/research-paper-rag", "programmingLanguage": "Python", "author": {"@type": "Person", "name": "Arbab Latif", "url": "https://arbablatif.github.io/"}, "license": "https://opensource.org/licenses/MIT"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arbablatif.github.io/"}, {"@type": "ListItem", "position": 2, "name": "Research Paper RAG", "item": "https://arbablatif.github.io/projects/research-paper-rag/"}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head"><div class="wrap">
+<a class="brand" href="/">Arbab Latif</a>
+<nav aria-label="Main"><a href="/#work">Work</a><a href="/#about">About</a><a href="/#contact">Contact</a><a href="https://github.com/arbablatif">GitHub</a></nav>
+</div></header>
+<main id="main" class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/#work">Work</a></li><li>Research Paper RAG</li></ol></nav>
+<article class="project">
+<h1>Research Paper RAG with Page-Level Citations</h1>
+<p class="lede">A retrieval-augmented generation assistant that answers questions from a folder of engineering research PDFs. Every answer cites its document and page, and if the sources do not contain the answer, it refuses.</p>
+<p class="actions"><a class="btn primary" href="https://github.com/arbablatif/research-paper-rag">View the code on GitHub</a><a class="btn" href="https://github.com/arbablatif/research-paper-rag#results">Full results</a></p>
+<dl class="metrics"><div><dt>answer accuracy on 12 answerable questions</dt><dd>83.3%</dd></div><div><dt>of cited pages were actually retrieved</dt><dd>92.3%</dd></div><div><dt>unanswerable questions correctly refused</dt><dd>3/3</dd></div></dl>
+
+<section class="prose"><h2>Problem</h2><p>Engineers need precise answers from papers: which hyperparameters, what error rate, what architectural trick. A general chatbot answers from memory, can invent numbers, and cannot show where a claim came from. This tool answers only from your PDFs, so every claim can be checked against a page.</p></section>
+<section class="prose"><h2>Approach</h2><ul><li>Text is extracted page by page, and chunks never cross a page boundary, so each page reference is exact.</li><li>Chunks are embedded locally with sentence-transformers and stored in Chroma, so indexing makes no API calls.</li><li>The model must cite every claim or return a fixed refusal sentence.</li><li>A similarity gate refuses weak matches before any LLM call, which also saves cost.</li><li>Citations are parsed from each answer and checked against the passages actually retrieved.</li></ul></section>
+<section class="prose"><h2>Results</h2><ul><li>The evaluation uses 15 hand-written questions over 5 open-access arXiv papers, scored by deterministic string and page matching with no LLM judge.</li><li>Overall score was 86.7%. Retrieval alone found the right page for 75.0% of questions; the LLM added synthesis and proper refusals.</li><li>The first real run scored 75%. Two of the failures were bugs in my own citation parser and scorer, not in the model.</li></ul></section>
+<section class="prose"><h2>Limitations</h2><ul><li>Fifteen questions is a smoke test, not a benchmark.</li><li>Text extraction flattens equations and tables, so content in algorithm boxes retrieves poorly.</li><li>Scanned PDFs without a text layer cannot be indexed.</li><li>Follow-up questions do not use chat history for retrieval.</li></ul></section>
+<section class="prose"><h2>Built with</h2><ul class="stack"><li>Python</li><li>sentence-transformers</li><li>ChromaDB</li><li>pypdf</li><li>Streamlit</li><li>Gemini</li><li>Anthropic</li><li>OpenAI</li></ul></section>
+</article>
+<section class="group"><h2>Related projects</h2><ul class="work"><li><a href="/projects/rag-evaluation-lab/"><div><h3>RAG Evaluation Lab</h3><p>A controlled test of 12 RAG configurations that reports which differences are real and which are noise.</p></div><div class="m"><strong>94%</strong><span>best answer score: 1024-token chunks, Granite, top-5</span></div></a></li><li><a href="/projects/analytics-agent/"><div><h3>Analytics Agent</h3><p>Answers business questions in plain English with guarded SQL, and every figure traces to a query.</p></div><div class="m"><strong>93%</strong><span>execution accuracy with business definitions, up from 67%</span></div></a></li></ul></section>
+</main>
+<footer class="site-foot"><div class="wrap">Arbab Latif. Project code is MIT licensed on <a href="https://github.com/arbablatif">GitHub</a>.</div></footer>
+</body>
+</html>

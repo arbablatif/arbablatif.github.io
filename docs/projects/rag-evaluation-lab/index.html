@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAG Evaluation: Chunks, Embeddings and Top-k | Arbab Latif</title>
+<meta name="description" content="A controlled experiment comparing RAG chunk sizes, embedding models and top-k across 12 configurations, scored on hit rate, correctness and latency.">
+<meta name="author" content="Arbab Latif">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://arbablatif.github.io/projects/rag-evaluation-lab/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Arbab Latif">
+<meta property="og:title" content="RAG Evaluation: Chunks, Embeddings and Top-k | Arbab Latif">
+<meta property="og:description" content="A controlled experiment comparing RAG chunk sizes, embedding models and top-k across 12 configurations, scored on hit rate, correctness and latency.">
+<meta property="og:url" content="https://arbablatif.github.io/projects/rag-evaluation-lab/">
+<meta property="og:image" content="https://arbablatif.github.io/assets/projects/rag-evaluation-lab.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RAG Evaluation: Chunks, Embeddings and Top-k | Arbab Latif">
+<meta name="twitter:description" content="A controlled experiment comparing RAG chunk sizes, embedding models and top-k across 12 configurations, scored on hit rate, correctness and latency.">
+<meta name="twitter:image" content="https://arbablatif.github.io/assets/projects/rag-evaluation-lab.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareSourceCode", "name": "RAG Evaluation Lab", "description": "A controlled experiment comparing RAG chunk sizes, embedding models and top-k across 12 configurations, scored on hit rate, correctness and latency.", "url": "https://arbablatif.github.io/projects/rag-evaluation-lab/", "codeRepository": "https://github.com/arbablatif/rag-evaluation-lab", "programmingLanguage": "Python", "author": {"@type": "Person", "name": "Arbab Latif", "url": "https://arbablatif.github.io/"}, "license": "https://opensource.org/licenses/MIT"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arbablatif.github.io/"}, {"@type": "ListItem", "position": 2, "name": "RAG Evaluation Lab", "item": "https://arbablatif.github.io/projects/rag-evaluation-lab/"}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head"><div class="wrap">
+<a class="brand" href="/">Arbab Latif</a>
+<nav aria-label="Main"><a href="/#work">Work</a><a href="/#about">About</a><a href="/#contact">Contact</a><a href="https://github.com/arbablatif">GitHub</a></nav>
+</div></header>
+<main id="main" class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/#work">Work</a></li><li>RAG Evaluation Lab</li></ol></nav>
+<article class="project">
+<h1>RAG Evaluation: Chunks, Embeddings and Top-k</h1>
+<p class="lede">A controlled experiment comparing retrieval-augmented generation design choices on one document set and one question set: 3 chunk sizes, 2 embedding models and 2 top-k values, giving 12 configurations.</p>
+<p class="actions"><a class="btn primary" href="https://github.com/arbablatif/rag-evaluation-lab">View the code on GitHub</a><a class="btn" href="https://github.com/arbablatif/rag-evaluation-lab#results">Full results</a></p>
+<dl class="metrics"><div><dt>best answer score: 1024-token chunks, Granite, top-5</dt><dd>94%</dd></div><div><dt>of a 1024-token chunk is never read by MiniLM</dt><dd>73%</dd></div><div><dt>hit rate from top-5 over top-3, the one separated effect</dt><dd>+12.5 pts</dd></div></dl>
+<figure><img src="/assets/projects/rag-evaluation-lab.png" alt="Charts of hit rate and answer score by chunk size, embedding model and top-k" width="1440" height="992" loading="lazy"><figcaption>Hit rate and answer score by chunk size, embedding model and top-k.</figcaption></figure>
+<section class="prose"><h2>Problem</h2><p>RAG systems are usually built on defaults: a chunk size from a tutorial, a popular embedding model and a top-k of 5. Those choices decide what the model sees, but teams rarely test them. This lab replaces guesswork with a repeatable comparison that reports its own uncertainty.</p></section>
+<section class="prose"><h2>Approach</h2><ul><li>Five open-access arXiv papers and 20 hand-written questions, including 4 unanswerable ones and a near miss.</li><li>The prompt, overlap, search method and LLM stay fixed, so only the three factors change.</li><li>Hit rate is matched on verbatim evidence snippets, which is stricter than matching a page.</li><li>A blind LLM judge scores answers against a written rubric, and the judge itself was audited.</li><li>95% bootstrap intervals and paired comparisons show which gaps can be trusted.</li></ul></section>
+<section class="prose"><h2>Results</h2><ul><li>Only the top-k effect on hit rate clears its interval. Other results point in a consistent direction but are evidence, not proof.</li><li>The system fails by refusing, not by inventing: all 48 unanswerable cases were correctly declined, and none of the 143 real answers was entirely wrong.</li><li>Retrieval decides the outcome. Answers were fully correct 93% of the time after a hit and 11% after a miss.</li><li>The judge agreed with deterministic fact matching on 94.4% of answers, and all 6 disagreements were read by hand.</li></ul></section>
+<section class="prose"><h2>Limitations</h2><ul><li>With 16 answerable questions, one question moves a score by about 6 points.</li><li>The corpus is 5 machine learning papers, so results may differ for contracts or manuals.</li><li>One LLM and one run; the judge is the same model as the generator.</li><li>Rerankers, hybrid search and semantic chunking were not tested.</li></ul></section>
+<section class="prose"><h2>Built with</h2><ul class="stack"><li>Python</li><li>sentence-transformers</li><li>NumPy</li><li>pypdf</li><li>Gemini</li><li>Anthropic</li><li>OpenAI</li></ul></section>
+</article>
+<section class="group"><h2>Related projects</h2><ul class="work"><li><a href="/projects/research-paper-rag/"><div><h3>Research Paper RAG</h3><p>Answers questions from engineering PDFs, cites the page, and refuses when the sources do not say.</p></div><div class="m"><strong>83.3%</strong><span>answer accuracy on 12 answerable questions</span></div></a></li><li><a href="/projects/style-tuned-llm/"><div><h3>Style-Tuned LLM</h3><p>Fine-tunes a 1.5B open model on a free GPU to rewrite complex text in plain English.</p></div><div class="m"><strong>7.53</strong><span>reading grade on ASSET, against 8.38 for the base model</span></div></a></li></ul></section>
+</main>
+<footer class="site-foot"><div class="wrap">Arbab Latif. Project code is MIT licensed on <a href="https://github.com/arbablatif">GitHub</a>.</div></footer>
+</body>
+</html>

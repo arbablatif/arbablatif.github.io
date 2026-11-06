@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QLoRA Fine-Tuning for Plain-English Rewriting | Arbab Latif</title>
+<meta name="description" content="QLoRA fine-tuning of Qwen2.5-1.5B to rewrite complex text in plain English on a free Colab T4 GPU, compared with the base model and human references.">
+<meta name="author" content="Arbab Latif">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://arbablatif.github.io/projects/style-tuned-llm/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Arbab Latif">
+<meta property="og:title" content="QLoRA Fine-Tuning for Plain-English Rewriting | Arbab Latif">
+<meta property="og:description" content="QLoRA fine-tuning of Qwen2.5-1.5B to rewrite complex text in plain English on a free Colab T4 GPU, compared with the base model and human references.">
+<meta property="og:url" content="https://arbablatif.github.io/projects/style-tuned-llm/">
+<meta property="og:image" content="https://arbablatif.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="QLoRA Fine-Tuning for Plain-English Rewriting | Arbab Latif">
+<meta name="twitter:description" content="QLoRA fine-tuning of Qwen2.5-1.5B to rewrite complex text in plain English on a free Colab T4 GPU, compared with the base model and human references.">
+<meta name="twitter:image" content="https://arbablatif.github.io/assets/og.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareSourceCode", "name": "Style-Tuned LLM", "description": "QLoRA fine-tuning of Qwen2.5-1.5B to rewrite complex text in plain English on a free Colab T4 GPU, compared with the base model and human references.", "url": "https://arbablatif.github.io/projects/style-tuned-llm/", "codeRepository": "https://github.com/arbablatif/style-tuned-llm", "programmingLanguage": "Python", "author": {"@type": "Person", "name": "Arbab Latif", "url": "https://arbablatif.github.io/"}, "license": "https://opensource.org/licenses/MIT"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arbablatif.github.io/"}, {"@type": "ListItem", "position": 2, "name": "Style-Tuned LLM", "item": "https://arbablatif.github.io/projects/style-tuned-llm/"}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head"><div class="wrap">
+<a class="brand" href="/">Arbab Latif</a>
+<nav aria-label="Main"><a href="/#work">Work</a><a href="/#about">About</a><a href="/#contact">Contact</a><a href="https://github.com/arbablatif">GitHub</a></nav>
+</div></header>
+<main id="main" class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/#work">Work</a></li><li>Style-Tuned LLM</li></ol></nav>
+<article class="project">
+<h1>QLoRA Fine-Tuning for Plain-English Rewriting</h1>
+<p class="lede">QLoRA fine-tuning of a small open-source model to rewrite complex text in plain English, trained on a free Colab GPU. It tests whether a 1.5B-parameter model, tuned for under an hour, can do the job more reliably than the same model with prompting alone.</p>
+<p class="actions"><a class="btn primary" href="https://github.com/arbablatif/style-tuned-llm">View the code on GitHub</a><a class="btn" href="https://github.com/arbablatif/style-tuned-llm#results">Full results</a></p>
+<dl class="metrics"><div><dt>reading grade on ASSET, against 8.38 for the base model</dt><dd>7.53</dd></div><div><dt>of numbers kept, against 0.89 for the base model</dt><dd>0.92</dd></div><div><dt>of the model&#x27;s parameters trained</dt><dd>1.2%</dd></div></dl>
+
+<section class="prose"><h2>Problem</h2><p>Technical writing is often hard to read for the people who need it. Large hosted models can simplify it, but they cost money per call and send your text to a third party.</p></section>
+<section class="prose"><h2>Approach</h2><ul><li>The base model is Qwen2.5-1.5B-Instruct, trained with 4-bit QLoRA using PEFT and TRL.</li><li>Training data is 20,000 cleaned sentence pairs, filtered for length, encoding, near-copies, readability, number changes and meaning.</li><li>No LLM API was used to create data, and the project makes no paid API calls.</li><li>Base and fine-tuned models run in the same 4-bit setup on 359 unseen ASSET sentences and 20 hand-written technical passages.</li></ul></section>
+<section class="prose"><h2>Results</h2><ul><li>Run 1 lost too many numbers, so run 2 rejected training pairs that drop a number. Numbers kept rose from 0.68 to 0.92.</li><li>Output is 81% of the source length, while the base model writes 116%.</li><li>There was no readability gain on technical text: the difference is within noise on only 20 sentences.</li><li>It still invents facts. Six ASSET outputs contain an invented number, and the README shows examples.</li></ul></section>
+<section class="prose"><h2>Limitations</h2><ul><li>Training data is encyclopedia text, not technical documentation.</li><li>The model can drop details, change facts and invent figures.</li><li>Each result comes from one training run.</li><li>Do not use it for medical, legal or safety text without expert review. Parts of the data have non-commercial terms.</li></ul></section>
+<section class="prose"><h2>Built with</h2><ul class="stack"><li>Python</li><li>PEFT</li><li>TRL</li><li>QLoRA</li><li>Qwen2.5</li><li>Hugging Face</li><li>Gradio</li><li>Google Colab</li></ul></section>
+</article>
+<section class="group"><h2>Related projects</h2><ul class="work"><li><a href="/projects/rag-evaluation-lab/"><div><h3>RAG Evaluation Lab</h3><p>A controlled test of 12 RAG configurations that reports which differences are real and which are noise.</p></div><div class="m"><strong>94%</strong><span>best answer score: 1024-token chunks, Granite, top-5</span></div></a></li><li><a href="/projects/research-paper-rag/"><div><h3>Research Paper RAG</h3><p>Answers questions from engineering PDFs, cites the page, and refuses when the sources do not say.</p></div><div class="m"><strong>83.3%</strong><span>answer accuracy on 12 answerable questions</span></div></a></li></ul></section>
+</main>
+<footer class="site-foot"><div class="wrap">Arbab Latif. Project code is MIT licensed on <a href="https://github.com/arbablatif">GitHub</a>.</div></footer>
+</body>
+</html>

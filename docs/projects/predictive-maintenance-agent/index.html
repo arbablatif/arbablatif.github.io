@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Predictive Maintenance Agent: Faults and RUL | Arbab Latif</title>
+<meta name="description" content="Bearing fault diagnosis, remaining useful life prediction and an LLM agent that writes number-checked maintenance tickets, tested on CWRU and NASA data.">
+<meta name="author" content="Arbab Latif">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://arbablatif.github.io/projects/predictive-maintenance-agent/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Arbab Latif">
+<meta property="og:title" content="Predictive Maintenance Agent: Faults and RUL | Arbab Latif">
+<meta property="og:description" content="Bearing fault diagnosis, remaining useful life prediction and an LLM agent that writes number-checked maintenance tickets, tested on CWRU and NASA data.">
+<meta property="og:url" content="https://arbablatif.github.io/projects/predictive-maintenance-agent/">
+<meta property="og:image" content="https://arbablatif.github.io/assets/projects/predictive-maintenance-agent.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Predictive Maintenance Agent: Faults and RUL | Arbab Latif">
+<meta name="twitter:description" content="Bearing fault diagnosis, remaining useful life prediction and an LLM agent that writes number-checked maintenance tickets, tested on CWRU and NASA data.">
+<meta name="twitter:image" content="https://arbablatif.github.io/assets/projects/predictive-maintenance-agent.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "SoftwareSourceCode", "name": "Predictive Maintenance Agent", "description": "Bearing fault diagnosis, remaining useful life prediction and an LLM agent that writes number-checked maintenance tickets, tested on CWRU and NASA data.", "url": "https://arbablatif.github.io/projects/predictive-maintenance-agent/", "codeRepository": "https://github.com/arbablatif/predictive-maintenance-agent", "programmingLanguage": "Python", "author": {"@type": "Person", "name": "Arbab Latif", "url": "https://arbablatif.github.io/"}, "license": "https://opensource.org/licenses/MIT"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://arbablatif.github.io/"}, {"@type": "ListItem", "position": 2, "name": "Predictive Maintenance Agent", "item": "https://arbablatif.github.io/projects/predictive-maintenance-agent/"}]}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head"><div class="wrap">
+<a class="brand" href="/">Arbab Latif</a>
+<nav aria-label="Main"><a href="/#work">Work</a><a href="/#about">About</a><a href="/#contact">Contact</a><a href="https://github.com/arbablatif">GitHub</a></nav>
+</div></header>
+<main id="main" class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/#work">Work</a></li><li>Predictive Maintenance Agent</li></ol></nav>
+<article class="project">
+<h1>Predictive Maintenance Agent: Faults and RUL</h1>
+<p class="lede">Turns a machine signal into a maintenance ticket: what is wrong, how sure we are, what to do, and by when. Physics and machine learning produce the numbers, an LLM agent writes the explanation, and code checks that every number came from a tool.</p>
+<p class="actions"><a class="btn primary" href="https://github.com/arbablatif/predictive-maintenance-agent">View the code on GitHub</a><a class="btn" href="https://github.com/arbablatif/predictive-maintenance-agent#results">Full results</a></p>
+<dl class="metrics"><div><dt>recording accuracy on unseen operating loads (CWRU)</dt><dd>97.5%</dd></div><div><dt>recording accuracy on unseen fault sizes, the harder test</dt><dd>87.2%</dd></div><div><dt>RUL RMSE on 100 NASA C-MAPSS test engines</dt><dd>13.27</dd></div></dl>
+<figure><img src="/assets/projects/predictive-maintenance-agent.png" alt="Envelope spectrum of a held-out outer race recording, with peaks at the BPFO harmonics" width="1170" height="494" loading="lazy"><figcaption>Envelope spectrum of a held-out outer race fault, with peaks at the BPFO harmonics.</figcaption></figure>
+<section class="prose"><h2>Problem</h2><p>Unplanned failures are expensive, and vibration analysis needs a specialist to read it. Automation goes wrong in two ways: bearing datasets are easy to leak, so scores look better than they are (a random split here scores 100%), and language models invent numbers. A made-up deadline on a ticket is worse than no ticket.</p></section>
+<section class="prose"><h2>Approach</h2><ul><li>Fault diagnosis uses gradient boosting on time-domain and envelope spectrum features, tested on loads it has never seen.</li><li>Remaining useful life uses gradient boosting on sensor statistics, with an 80% prediction interval from quantile models.</li><li>A tool-calling agent writes the finding and recommended action; urgency, deadline and confidence are set by code.</li><li>Code reviews the text for numbers, deadlines, bearing life claims and contradictions. A failed draft gets one retry, then the ticket is stamped UNVERIFIED.</li><li>Remaining life is deliberately not estimated for bearings, because the data cannot support it.</li></ul></section>
+<section class="prose"><h2>Results</h2><ul><li>How you test matters most: the same features and model score 100% on leaky random windows and 87.2% on unseen fault sizes.</li><li>High-confidence labels were correct on every recording in both tests, 23 of 23 and 15 of 15, though the counts are small.</li><li>The review caught 80 of 80 invented claims, but those came from ten fabrications I wrote myself, so it shows the check works on those patterns only.</li><li>Eight live agent cases are a smoke test, not a benchmark.</li></ul></section>
+<section class="prose"><h2>Limitations</h2><ul><li>CWRU is one rig with seeded faults, so expect lower accuracy on real machines.</li><li>There are only four healthy recordings, and the one load-split error comes directly from that.</li><li>C-MAPSS is simulated, and beyond about 125 cycles the model can only say healthy.</li><li>The text review is pattern matching, so unusual wording can get past it. A person should approve interventions.</li></ul></section>
+<section class="prose"><h2>Built with</h2><ul class="stack"><li>Python</li><li>scikit-learn</li><li>NumPy</li><li>SciPy</li><li>pandas</li><li>Streamlit</li><li>Gemini</li><li>Anthropic</li><li>OpenAI</li></ul></section>
+</article>
+<section class="group"><h2>Related projects</h2><ul class="work"><li><a href="/projects/dsp-copilot/"><div><h3>DSP Copilot</h3><p>Runs signal processing from plain-English requests, with the maths done by typed tools, not the model.</p></div><div class="m"><strong>6 of 6</strong><span>live requests passed, measured on the output signals</span></div></a></li><li><a href="/projects/contactless-vitals/"><div><h3>Contactless Vitals</h3><p>Extracts a pulse waveform from ordinary face video using remote photoplethysmography (rPPG).</p></div><div class="m"><strong>0.79</strong><span>correlation with a contact sensor on one real recording</span></div></a></li></ul></section>
+</main>
+<footer class="site-foot"><div class="wrap">Arbab Latif. Project code is MIT licensed on <a href="https://github.com/arbablatif">GitHub</a>.</div></footer>
+</body>
+</html>
